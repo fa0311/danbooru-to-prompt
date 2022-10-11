@@ -1,0 +1,25 @@
+{
+    "name": "danbooru-to-prompt",
+    "description": "Assist tool to create prompt running on danbooru",
+    "version": "1.0.0",
+    "manifest_version": 3,
+    "action": {
+        "default_popup": "html/popup.html"
+    },
+    "permissions": [
+        "clipboardWrite"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "https://danbooru.donmai.us/*"
+            ],
+            "js": [
+                "js/main.js"
+            ],
+            "css": [
+                "css/main.css"
+            ]
+        }
+    ]
+}
