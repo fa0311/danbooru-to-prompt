@@ -126,7 +126,7 @@ window.addEventListener("load", (e) => {
       )
     ).map((value) =>
       attention(
-        value.getAttribute("data-tag-name")!,
+        escape(value.getAttribute("data-tag-name")!),
         parseFloat(value.querySelector(attentionSpanQuery)?.innerHTML ?? "1.0")
       )
     );
@@ -135,7 +135,15 @@ window.addEventListener("load", (e) => {
   const attention = (word: string, factor: number): string => {
     if (factor == 1) return word;
     if (factor == 1.1) return "(" + word + ")";
-    return "(word:" + factor.toFixed(1) + ")";
+    return "(" + word + ":" + factor.toFixed(1) + ")";
+  };
+
+  const escape = (word: string): string => {
+    return word
+      .replace("(", "\\(")
+      .replace(")", "\\)")
+      .replace("[", "\\[")
+      .replace("]", "\\]");
   };
 
   const sort = (value: Element[]): Element[] => {
