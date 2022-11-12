@@ -47,9 +47,9 @@ window.addEventListener("load", (e) => {
   const tagQuery = "li.tag-type-0";
   const InsertElement = toDiv(
     '<input type="checkbox">' +
-      '<svg class="icon svg-icon attention-icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M272 480h-96c-13.3 0-24-10.7-24-24V256H48.2c-21.4 0-32.1-25.8-17-41L207 39c9.4-9.4 24.6-9.4 34 0l175.8 176c15.1 15.1 4.4 41-17 41H296v200c0 13.3-10.7 24-24 24z"></path></svg>' +
-      toSpan("1.0", "data-tag-attention", "class") +
-      '<svg class="icon svg-icon emphasis-icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M176 32h96c13.3 0 24 10.7 24 24v200h103.8c21.4 0 32.1 25.8 17 41L241 473c-9.4 9.4-24.6 9.4-34 0L31.3 297c-15.1-15.1-4.4-41 17-41H152V56c0-13.3 10.7-24 24-24z"></path></svg>',
+      '<svg class="icon svg-icon emphasis-up-icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M272 480h-96c-13.3 0-24-10.7-24-24V256H48.2c-21.4 0-32.1-25.8-17-41L207 39c9.4-9.4 24.6-9.4 34 0l175.8 176c15.1 15.1 4.4 41-17 41H296v200c0 13.3-10.7 24-24 24z"></path></svg>' +
+      toSpan("1.0", "data-tag-emphasis", "class") +
+      '<svg class="icon svg-icon emphasis-down-icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M176 32h96c13.3 0 24 10.7 24 24v200h103.8c21.4 0 32.1 25.8 17 41L241 473c-9.4 9.4-24.6 9.4-34 0L31.3 297c-15.1-15.1-4.4-41 17-41H152V56c0-13.3 10.7-24 24-24z"></path></svg>',
     "d2p-option"
   );
 
@@ -94,26 +94,26 @@ window.addEventListener("load", (e) => {
   );
 
   const listItemQuery = "ul>li";
-  const attentionQuery = ".attention-icon";
-  const emphasisQuery = ".emphasis-icon";
-  const attentionSpanQuery = "span.data-tag-attention";
+  const emphasisUpQuery = ".emphasis-up-icon";
+  const emphasisDownQuery = ".emphasis-down-icon";
+  const emphasisSpanQuery = "span.data-tag-emphasis";
   heading.querySelectorAll(listItemQuery).forEach((li) => {
     li.insertAdjacentHTML("afterbegin", InsertElement);
   });
-  heading.querySelectorAll(attentionQuery).forEach((icon) => {
+  heading.querySelectorAll(emphasisUpQuery).forEach((icon) => {
     icon.addEventListener("click", (e) => {
-      let attention = icon.parentElement?.querySelector(attentionSpanQuery);
-      if (attention === undefined) return;
-      if (attention === null) return;
-      attention.innerHTML = (parseFloat(attention.innerHTML) * 1.1).toFixed(1);
+      let emphasis = icon.parentElement?.querySelector(emphasisSpanQuery);
+      if (emphasis === undefined) return;
+      if (emphasis === null) return;
+      emphasis.innerHTML = (parseFloat(emphasis.innerHTML) * 1.1).toFixed(1);
     });
   });
-  heading.querySelectorAll(emphasisQuery).forEach((icon) => {
+  heading.querySelectorAll(emphasisDownQuery).forEach((icon) => {
     icon.addEventListener("click", (e) => {
-      let attention = icon.parentElement?.querySelector(attentionSpanQuery);
-      if (attention === undefined) return;
-      if (attention === null) return;
-      attention.innerHTML = (parseFloat(attention.innerHTML) / 1.1).toFixed(1);
+      let emphasis = icon.parentElement?.querySelector(emphasisSpanQuery);
+      if (emphasis === undefined) return;
+      if (emphasis === null) return;
+      emphasis.innerHTML = (parseFloat(emphasis.innerHTML) / 1.1).toFixed(1);
     });
   });
 
@@ -125,14 +125,14 @@ window.addEventListener("load", (e) => {
           .filter((value) => value !== null)
       )
     ).map((value) =>
-      attention(
+      emphasis(
         escape(value.getAttribute("data-tag-name")!),
-        parseFloat(value.querySelector(attentionSpanQuery)?.innerHTML ?? "1.0")
+        parseFloat(value.querySelector(emphasisSpanQuery)?.innerHTML ?? "1.0")
       )
     );
   };
 
-  const attention = (word: string, factor: number): string => {
+  const emphasis = (word: string, factor: number): string => {
     if (factor == 1) return word;
     if (factor == 1.1) return "(" + word + ")";
     return "(" + word + ":" + factor.toFixed(1) + ")";
