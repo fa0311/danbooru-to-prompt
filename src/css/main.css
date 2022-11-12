@@ -3,3 +3,8 @@
     overflow-wrap: break-word;
     margin-left: 0.4em;
 }
+
+.d2p-option {
+    user-select: none;
+    display: inline;
+}

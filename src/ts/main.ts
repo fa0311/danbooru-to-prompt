@@ -16,6 +16,11 @@ const toHeading = (value: string, style: string | null = null): string => {
   else return `<h3 class="${style}">${value}</h3>`;
 };
 
+const toDiv = (value: string, style: string | null = null): string => {
+  if (style == null) return `<div>${value}</div>`;
+  else return `<div class="${style}">${value}</div>`;
+};
+
 const toButton = (value: string, id: string | null = null): string => {
   if (id == null) return `<button>${value}</button>`;
   else return `<button id="${id}">${value}</button>`;
@@ -26,9 +31,13 @@ const toParagraph = (value: string, id: string | null = null): string => {
   else return `<p id="${id}">${value}</p>`;
 };
 
-const toSpan = (value: string, id: string | null = null): string => {
+const toSpan = (
+  value: string,
+  id: string | null = null,
+  attr: string = "id"
+): string => {
   if (id == null) return `<span>${value}</span>`;
-  else return `<span id="${id}">${value}</span>`;
+  else return `<span ${attr}="${id}">${value}</span>`;
 };
 
 window.addEventListener("load", (e) => {
@@ -36,6 +45,13 @@ window.addEventListener("load", (e) => {
   const checkedQuery = 'input[type="checkbox"]:checked';
   const checkboxQuery = 'input[type="checkbox"]';
   const tagQuery = "li.tag-type-0";
+  const InsertElement = toDiv(
+    '<input type="checkbox">' +
+      '<svg class="icon svg-icon attention-icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M272 480h-96c-13.3 0-24-10.7-24-24V256H48.2c-21.4 0-32.1-25.8-17-41L207 39c9.4-9.4 24.6-9.4 34 0l175.8 176c15.1 15.1 4.4 41-17 41H296v200c0 13.3-10.7 24-24 24z"></path></svg>' +
+      toSpan("1.0", "data-tag-attention", "class") +
+      '<svg class="icon svg-icon emphasis-icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M176 32h96c13.3 0 24 10.7 24 24v200h103.8c21.4 0 32.1 25.8 17 41L241 473c-9.4 9.4-24.6 9.4-34 0L31.3 297c-15.1-15.1-4.4-41 17-41H152V56c0-13.3 10.7-24 24-24z"></path></svg>',
+    "d2p-option"
+  );
 
   const heading: Element | null = document.querySelector(tagListQuery);
   if (heading == null) return;
@@ -78,19 +94,48 @@ window.addEventListener("load", (e) => {
   );
 
   const listItemQuery = "ul>li";
+  const attentionQuery = ".attention-icon";
+  const emphasisQuery = ".emphasis-icon";
+  const attentionSpanQuery = "span.data-tag-attention";
   heading.querySelectorAll(listItemQuery).forEach((li) => {
-    li.insertAdjacentHTML("afterbegin", '<input type="checkbox">');
+    li.insertAdjacentHTML("afterbegin", InsertElement);
+  });
+  heading.querySelectorAll(attentionQuery).forEach((icon) => {
+    icon.addEventListener("click", (e) => {
+      let attention = icon.parentElement?.querySelector(attentionSpanQuery);
+      if (attention === undefined) return;
+      if (attention === null) return;
+      attention.innerHTML = (parseFloat(attention.innerHTML) * 1.1).toFixed(1);
+    });
+  });
+  heading.querySelectorAll(emphasisQuery).forEach((icon) => {
+    icon.addEventListener("click", (e) => {
+      let attention = icon.parentElement?.querySelector(attentionSpanQuery);
+      if (attention === undefined) return;
+      if (attention === null) return;
+      attention.innerHTML = (parseFloat(attention.innerHTML) / 1.1).toFixed(1);
+    });
   });
 
   const getChecked = (): string[] => {
     return sort(
-      [...heading.querySelectorAll(checkedQuery)]
-        .filter((input) => input.parentElement !== null)
-        .filter(
-          (input) => input.parentElement!.getAttribute("data-tag-name") !== null
-        )
-        .map((value) => value.parentElement!)
-    ).map((value) => value.getAttribute("data-tag-name")!);
+      <Element[]>(
+        [...heading.querySelectorAll(checkedQuery)]
+          .map((input) => input?.parentElement?.parentElement)
+          .filter((value) => value !== null)
+      )
+    ).map((value) =>
+      attention(
+        value.getAttribute("data-tag-name")!,
+        parseFloat(value.querySelector(attentionSpanQuery)?.innerHTML ?? "1.0")
+      )
+    );
+  };
+
+  const attention = (word: string, factor: number): string => {
+    if (factor == 1) return word;
+    if (factor == 1.1) return "(" + word + ")";
+    return "(word:" + factor.toFixed(1) + ")";
   };
 
   const sort = (value: Element[]): Element[] => {
