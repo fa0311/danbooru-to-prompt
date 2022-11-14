@@ -105,7 +105,8 @@ window.addEventListener("load", (e) => {
       let emphasis = icon.parentElement?.querySelector(emphasisSpanQuery);
       if (emphasis === undefined) return;
       if (emphasis === null) return;
-      emphasis.innerHTML = (parseFloat(emphasis.innerHTML) * 1.1).toFixed(1);
+      if (parseFloat(emphasis.innerHTML) >= 1.7) return;
+      emphasis.innerHTML = (parseFloat(emphasis.innerHTML) + 0.1).toFixed(1);
     });
   });
   heading.querySelectorAll(emphasisDownQuery).forEach((icon) => {
@@ -113,7 +114,8 @@ window.addEventListener("load", (e) => {
       let emphasis = icon.parentElement?.querySelector(emphasisSpanQuery);
       if (emphasis === undefined) return;
       if (emphasis === null) return;
-      emphasis.innerHTML = (parseFloat(emphasis.innerHTML) / 1.1).toFixed(1);
+      if (parseFloat(emphasis.innerHTML) <= 0.1) return;
+      emphasis.innerHTML = (parseFloat(emphasis.innerHTML) - 0.1).toFixed(1);
     });
   });
 
