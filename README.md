@@ -1,5 +1,7 @@
 # danbooru-to-prompt
 
+![](https://img.shields.io/github/downloads/fa0311/danbooru-to-prompt/total)
+
 Assist tool to create prompt running on [danbooru](https://danbooru.donmai.us/)<br>
 
 [demo video](https://twitter.com/faa0311/status/1579917156657303552)
