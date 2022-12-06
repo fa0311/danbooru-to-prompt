@@ -42,6 +42,7 @@ window.addEventListener("load", (e) => {
     "afterbegin",
     `<ul class="tag-list">
       <button id="d2p-auto-select">auto select</button>
+      <button id="d2p-all-select">all select</button>
       <button id="d2p-copy">copy to clipboard</button>
       <p>
         <span>token size: </span>
@@ -197,6 +198,19 @@ window.addEventListener("load", (e) => {
         if (length + clacTokenSize(input) > 75) return;
         (value.querySelector(checkboxQuery) as HTMLInputElement).checked = true;
         length += clacTokenSize(input);
+      });
+      changeTokenSize();
+    });
+
+  document
+    .getElementById("d2p-all-select")
+    ?.addEventListener("click", (button: MouseEvent) => {
+      const tagList = [...heading.querySelectorAll(tagQuery)]
+        .filter((tag) => tag.getAttribute("data-tag-name") !== null)
+        .filter((tag) => tag.querySelector(checkboxQuery) !== null);
+
+      tagList.forEach((value) => {
+        (value.querySelector(checkboxQuery) as HTMLInputElement).checked = true;
       });
       changeTokenSize();
     });
