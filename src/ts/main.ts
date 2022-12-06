@@ -104,6 +104,28 @@ window.addEventListener("load", (e) => {
     );
   };
 
+  const toSimply = (word: Element[]): Element[] => {
+    return word.filter((value) =>
+      word
+        .map((text) => {
+          let textAttr = text.getAttribute("data-tag-name");
+          let valueAttr = value.getAttribute("data-tag-name");
+          if (textAttr == null) return false;
+          if (valueAttr == null) return false;
+          if (valueAttr == textAttr) return false;
+          return ["", "ing", "ed", "s"]
+            .map((end) => {
+              if (!valueAttr!.endsWith(end)) return false;
+              return textAttr!.includes(
+                valueAttr!.replace(new RegExp(end + "$"), "")
+              );
+            })
+            .some((v) => v === true);
+        })
+        .every((v) => v === false)
+    );
+  };
+
   const emphasis = (word: string, factor: number): string => {
     if (factor == 1) return word;
     if (factor == 1.1) return "(" + word + ")";
@@ -138,9 +160,11 @@ window.addEventListener("load", (e) => {
     return value.match(re)?.length ?? 0;
   };
   const getTokenSize = (): number => {
-    return getChecked()
-      .map((value) => Number(clacTokenSize(value)))
-      .reduce((sum, element) => sum + element, 0);
+    return Math.floor(
+      getChecked()
+        .map((value) => Number(clacTokenSize(value)))
+        .reduce((sum, element) => sum + element, 0) * 0.9
+    );
   };
 
   const changeTokenSize = () => {
@@ -167,8 +191,8 @@ window.addEventListener("load", (e) => {
           false;
       });
       let length = getTokenSize();
-      sort(tagList).forEach((value: Element) => {
-        const input: string | null = value.getAttribute("data-tag-name");
+      sort(toSimply(tagList)).forEach((value: Element) => {
+        const input = value.getAttribute("data-tag-name");
         if (input == null) return;
         if (length + clacTokenSize(input) > 75) return;
         (value.querySelector(checkboxQuery) as HTMLInputElement).checked = true;
