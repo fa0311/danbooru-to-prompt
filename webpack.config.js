@@ -29,7 +29,7 @@ module.exports = {
         { from: "css", to: "../css", context: "src" },
         { from: "js", to: "../js", context: "src" },
         { from: "manifest.json", to: "../", context: "src" },
-        { from: "LICENCE", to: "../" },
+        { from: "LICENSE", to: "../" },
       ],
     }),
   ],
