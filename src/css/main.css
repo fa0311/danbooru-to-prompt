@@ -6,5 +6,5 @@
 
 .d2p-option {
     user-select: none;
-    display: inline;
+    display: inline-block;
 }

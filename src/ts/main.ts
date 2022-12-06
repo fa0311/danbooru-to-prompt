@@ -1,96 +1,59 @@
 const HEADER = "[danbooru-to-prompt]";
 
-const toTagList = (value: string): string => {
-  return `<ul class="tag-list">${value}</ul>`;
-};
-
-const toList = (value: string, style: string | null = null): string => {
-  if (style == null)
-    return `<li data-tag-name="${value}"><span title="9999999">${value}</span></li>`;
-  else
-    return `<li data-tag-name="${value}"><span class="${style}" title="9999999">${value}</span></li>`;
-};
-
-const toHeading = (value: string, style: string | null = null): string => {
-  if (style == null) return `<h3>${value}</h3>`;
-  else return `<h3 class="${style}">${value}</h3>`;
-};
-
-const toDiv = (value: string, style: string | null = null): string => {
-  if (style == null) return `<div>${value}</div>`;
-  else return `<div class="${style}">${value}</div>`;
-};
-
-const toButton = (value: string, id: string | null = null): string => {
-  if (id == null) return `<button>${value}</button>`;
-  else return `<button id="${id}">${value}</button>`;
-};
-
-const toParagraph = (value: string, id: string | null = null): string => {
-  if (id == null) return `<p>${value}</p>`;
-  else return `<p id="${id}">${value}</p>`;
-};
-
-const toSpan = (
-  value: string,
-  id: string | null = null,
-  attr: string = "id"
-): string => {
-  if (id == null) return `<span>${value}</span>`;
-  else return `<span ${attr}="${id}">${value}</span>`;
-};
-
 window.addEventListener("load", (e) => {
   const tagListQuery = "div.tag-list.categorized-tag-list";
   const checkedQuery = 'input[type="checkbox"]:checked';
   const checkboxQuery = 'input[type="checkbox"]';
   const tagQuery = "li.tag-type-0";
-  const InsertElement = toDiv(
-    '<input type="checkbox">' +
-      '<svg class="icon svg-icon emphasis-up-icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M272 480h-96c-13.3 0-24-10.7-24-24V256H48.2c-21.4 0-32.1-25.8-17-41L207 39c9.4-9.4 24.6-9.4 34 0l175.8 176c15.1 15.1 4.4 41-17 41H296v200c0 13.3-10.7 24-24 24z"></path></svg>' +
-      toSpan("1.0", "data-tag-emphasis", "class") +
-      '<svg class="icon svg-icon emphasis-down-icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M176 32h96c13.3 0 24 10.7 24 24v200h103.8c21.4 0 32.1 25.8 17 41L241 473c-9.4 9.4-24.6 9.4-34 0L31.3 297c-15.1-15.1-4.4-41 17-41H152V56c0-13.3 10.7-24 24-24z"></path></svg>',
-    "d2p-option"
-  );
+  const InsertElement = `
+  <div class="d2p-option">
+    <input type="checkbox">
+      <svg class="icon svg-icon emphasis-up-icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+        <path fill="currentColor" d="M272 480h-96c-13.3 0-24-10.7-24-24V256H48.2c-21.4 0-32.1-25.8-17-41L207 39c9.4-9.4 24.6-9.4 34 0l175.8 176c15.1 15.1 4.4 41-17 41H296v200c0 13.3-10.7 24-24 24z"></path>
+      </svg>
+      <span class="data-tag-emphasis">1.0</span>
+      <svg class="icon svg-icon emphasis-down-icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+        <path fill="currentColor" d="M176 32h96c13.3 0 24 10.7 24 24v200h103.8c21.4 0 32.1 25.8 17 41L241 473c-9.4 9.4-24.6 9.4-34 0L31.3 297c-15.1-15.1-4.4-41 17-41H152V56c0-13.3 10.7-24 24-24z"></path>
+      </svg>
+    </input>
+  <div>`;
 
   const heading: Element | null = document.querySelector(tagListQuery);
   if (heading == null) return;
 
   heading.insertAdjacentHTML(
     "afterbegin",
-    toTagList(
-      [
-        toList("masterpiece", "d2p-tag"),
-        toList("best quality", "d2p-tag"),
-      ].join("")
-    )
+    `<ul class="tag-list">
+      <li data-tag-name="masterpiece">
+        <span title="9999999">masterpiece</span>
+      </li>
+      <li data-tag-name="masterpiece">
+        <span title="9999999" class="d2p-tag">masterpiece</span>
+      </li>
+    </ul>`
   );
 
   heading.insertAdjacentHTML(
     "afterbegin",
-    toHeading("Quality Tag", "quality-tag-list")
+    `<h3 class="quality-tag-list">Quality Tag</h3>`
   );
 
   heading.insertAdjacentHTML(
     "afterbegin",
-    toTagList(
-      [
-        toButton("auto select", "d2p-auto-select"),
-        toButton("copy to clipboard", "d2p-copy"),
-        toParagraph(
-          [
-            toSpan("token size: "),
-            toSpan("0", "d2p-token-size"),
-            toSpan("/75"),
-          ].join("")
-        ),
-      ].join("")
-    )
+    `<ul class="tag-list">
+      <button id="d2p-auto-select">auto select</button>
+      <button id="d2p-copy">copy to clipboard</button>
+      <p>
+        <span>token size: </span>
+        <span id="d2p-token-size">0</span>
+        <span>/75</span>
+      </p>
+    </ul>`
   );
 
   heading.insertAdjacentHTML(
     "afterbegin",
-    toHeading("Danbooru To Prompt", "danbooru-to-prompt")
+    `<h3 class="danbooru-to-prompt">Danbooru To Prompt</h3>`
   );
 
   const listItemQuery = "ul>li";
@@ -105,8 +68,10 @@ window.addEventListener("load", (e) => {
       let emphasis = icon.parentElement?.querySelector(emphasisSpanQuery);
       if (emphasis === undefined) return;
       if (emphasis === null) return;
-      if (parseFloat(emphasis.innerHTML) >= 1.7) return;
-      emphasis.innerHTML = (parseFloat(emphasis.innerHTML) + 0.1).toFixed(1);
+      let strength = parseFloat(emphasis.getAttribute("emphasis") ?? "1") + 0.1;
+      if (strength >= 1.8) return;
+      emphasis.setAttribute("emphasis", strength.toFixed(1));
+      emphasis.innerHTML = strength.toFixed(1);
     });
   });
   heading.querySelectorAll(emphasisDownQuery).forEach((icon) => {
@@ -114,8 +79,10 @@ window.addEventListener("load", (e) => {
       let emphasis = icon.parentElement?.querySelector(emphasisSpanQuery);
       if (emphasis === undefined) return;
       if (emphasis === null) return;
-      if (parseFloat(emphasis.innerHTML) <= 0.1) return;
-      emphasis.innerHTML = (parseFloat(emphasis.innerHTML) - 0.1).toFixed(1);
+      let strength = parseFloat(emphasis.getAttribute("emphasis") ?? "1") - 0.1;
+      if (strength <= 0.01) return;
+      emphasis.setAttribute("emphasis", strength.toFixed(1));
+      emphasis.innerHTML = strength.toFixed(1);
     });
   });
 
