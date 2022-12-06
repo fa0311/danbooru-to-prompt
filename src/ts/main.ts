@@ -96,7 +96,10 @@ window.addEventListener("load", (e) => {
     ).map((value) =>
       emphasis(
         escape(value.getAttribute("data-tag-name")!),
-        parseFloat(value.querySelector(emphasisSpanQuery)?.innerHTML ?? "1.0")
+        parseFloat(
+          value.querySelector(emphasisSpanQuery)?.getAttribute("emphasis") ??
+            "1.0"
+        )
       )
     );
   };
